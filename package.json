@@ -1,7 +1,7 @@
 {
   "name": "vue3-sidebar-menu",
   "description": "A Vue.js Sidebar Menu Component - forked from vue-sidebar-menu",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "author": "samuele <bsamuele00@gmail.com>",
   "license": "MIT",
   "main": "dist/vue-sidebar-menu.js",
