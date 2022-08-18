@@ -1,16 +1,16 @@
 <template>
   <div
     ref="sidebarMenuRef"
-    class="v-sidebar-menu"
+    class="v-sidebar-menu mock-class"
     :class="sidebarClass"
     :style="{ 'max-width': sidebarWidth }"
   >
     <sidebar-menu-scroll>
-      <div>
+      <div class="vsm--menu-container--inner">
         <!-- inside scroll -->
         <slot name="header" />
 
-        <ul class="vsm--menu" :style="{ width: sidebarWidth }">
+        <ul class="vsm--menu vsm--menu--mock" :style="{ width: sidebarWidth }">
           <sidebar-menu-item
             v-for="item in computedMenu"
             :key="item.id"
