@@ -407,7 +407,7 @@ function useItem(props) {
     if (typeof item.href === "object") {
       return (
         item.href.name === router.currentRoute.name ||
-        item.child.some((c) =>
+        item.child?.some((c) =>
           typeof c.href === "object"
             ? c.href.name === router.currentRoute.name
             : false
