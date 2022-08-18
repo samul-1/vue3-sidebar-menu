@@ -2,9 +2,7 @@
 
 A Vue.js sidebar menu component with vue-router compatibility
 
-## Demo
-
-[vue-sidebar-menu-demo](https://yaminncco.github.io/vue-sidebar-menu/)
+[repo](https://github.com/samul-1/vue3-sidebar-menu)
 
 ### :warning: This documentation is for Vue 3, for Vue 2 [click here](https://github.com/yaminncco/vue-sidebar-menu/tree/vue2)
 
