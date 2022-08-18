@@ -402,17 +402,17 @@ function useItem(props) {
   });
 
   var isLinkActive = function isLinkActive(item, exact) {
-    // console.log(
-    //   "item",
-    //   item,
-    //   item.href,
-    //   "router.currentRoute",
-    //   router.currentRoute,
-    //   router.currentRoute.name,
-    //   router.currentRoute.href,
-    //   "child",
-    //   item.child
-    // );
+    console.log(
+      "item",
+      item,
+      item.href,
+      "router.currentRoute",
+      router.currentRoute,
+      router.currentRoute.name,
+      router.currentRoute.href,
+      "child",
+      item.child
+    );
     if (!item.href || item.external) return false;
 
     if (typeof item.href === "object") {
