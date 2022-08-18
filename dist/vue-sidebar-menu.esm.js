@@ -339,20 +339,24 @@ function useItem(props) {
   });
 
   var isLinkActive = function isLinkActive(item, exact) {
-    if (!item.href || item.external) return false;
+    try {
+      if (!item.href || item.external) return false;
 
-    if (router) {
-      var route = router.resolve(item.href);
-      var routerCurrentRoute = router.currentRoute.value;
-      var activeIndex = activeRecordIndex(route, routerCurrentRoute);
+      if (router) {
+        var route = router.resolve(item.href);
+        var routerCurrentRoute = router.currentRoute.value;
+        var activeIndex = activeRecordIndex(route, routerCurrentRoute);
 
-      if (exact || item.exact) {
-        return activeIndex > -1 && activeIndex === routerCurrentRoute.matched.length - 1 && isSameRouteLocationParams(routerCurrentRoute.params, route.params);
+        if (exact || item.exact) {
+          return activeIndex > -1 && activeIndex === routerCurrentRoute.matched.length - 1 && isSameRouteLocationParams(routerCurrentRoute.params, route.params);
+        }
+
+        return activeIndex > -1 && includesParams(routerCurrentRoute.params, route.params);
+      } else {
+        return item.href === currentRoute.value;
       }
-
-      return activeIndex > -1 && includesParams(routerCurrentRoute.params, route.params);
-    } else {
-      return item.href === currentRoute.value;
+    } catch (_unused) {
+      return false;
     }
   };
 

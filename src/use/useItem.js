@@ -36,24 +36,28 @@ export default function useItem(props) {
   });
 
   const isLinkActive = (item, exact) => {
-    if (!item.href || item.external) return false;
-    if (router) {
-      const route = router.resolve(item.href);
-      const routerCurrentRoute = router.currentRoute.value;
-      const activeIndex = activeRecordIndex(route, routerCurrentRoute);
-      if (exact || item.exact) {
+    try {
+      if (!item.href || item.external) return false;
+      if (router) {
+        const route = router.resolve(item.href);
+        const routerCurrentRoute = router.currentRoute.value;
+        const activeIndex = activeRecordIndex(route, routerCurrentRoute);
+        if (exact || item.exact) {
+          return (
+            activeIndex > -1 &&
+            activeIndex === routerCurrentRoute.matched.length - 1 &&
+            isSameRouteLocationParams(routerCurrentRoute.params, route.params)
+          );
+        }
         return (
           activeIndex > -1 &&
-          activeIndex === routerCurrentRoute.matched.length - 1 &&
-          isSameRouteLocationParams(routerCurrentRoute.params, route.params)
+          includesParams(routerCurrentRoute.params, route.params)
         );
+      } else {
+        return item.href === currentRoute.value;
       }
-      return (
-        activeIndex > -1 &&
-        includesParams(routerCurrentRoute.params, route.params)
-      );
-    } else {
-      return item.href === currentRoute.value;
+    } catch {
+      return false;
     }
   };
 
