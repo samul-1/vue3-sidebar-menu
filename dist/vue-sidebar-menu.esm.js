@@ -402,32 +402,32 @@ function useItem(props) {
   });
 
   var isLinkActive = function isLinkActive(item, exact) {
-    console.log(
-      "item",
-      item,
-      item.href,
-      "router.currentRoute",
-      router.currentRoute,
-      router.currentRoute.name,
-      router.currentRoute.href,
-      "child",
-      item.child
-    );
+    // console.log(
+    //   "item",
+    //   item,
+    //   item.href,
+    //   "router.currentRoute",
+    //   router.currentRoute,
+    //   router.currentRoute.name,
+    //   router.currentRoute.href,
+    //   "child",
+    //   item.child
+    // );
     if (!item.href || item.external) return false;
 
     if (typeof item.href === "object") {
       return (
-        item.href.name === router.currentRoute.name ||
+        item.href.name === router.currentRoute.value.name ||
         (item.child &&
           item.child.some((c) =>
             typeof c.href === "object"
-              ? c.href.name === router.currentRoute.name
+              ? c.href.name === router.currentRoute.value.name
               : false
           ))
       );
     }
 
-    return item.href === router.currentRoute.href;
+    return item.href === router.currentRoute.value.href;
 
     // if (router) {
     //   var route = router.resolve(item.href);
