@@ -1,8 +1,8 @@
 {
-  "name": "vue-sidebar-menu",
-  "description": "A Vue.js Sidebar Menu Component",
-  "version": "5.2.4",
-  "author": "yaminncco <yaminncco@gmail.com>",
+  "name": "vue3-sidebar-menu",
+  "description": "A Vue.js Sidebar Menu Component - forked from vue-sidebar-menu",
+  "version": "1.0.0",
+  "author": "samuele <bsamuele00@gmail.com>",
   "license": "MIT",
   "main": "dist/vue-sidebar-menu.js",
   "module": "dist/vue-sidebar-menu.esm.js",
