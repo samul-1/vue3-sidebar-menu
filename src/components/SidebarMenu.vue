@@ -6,22 +6,26 @@
     :style="{ 'max-width': sidebarWidth }"
   >
     <sidebar-menu-scroll>
-      <slot name="header" />
+      <div>
+        <!-- inside scroll -->
+        <slot name="header" />
 
-      <ul class="vsm--menu" :style="{ width: sidebarWidth }">
-        <sidebar-menu-item
-          v-for="item in computedMenu"
-          :key="item.id"
-          :item="item"
-        >
-          <template #dropdown-icon="{ isOpen }">
-            <slot name="dropdown-icon" v-bind="{ isOpen }">
-              <span class="vsm--arrow_default" />
-            </slot>
-          </template>
-        </sidebar-menu-item>
-      </ul>
-      <slot name="footer" />
+        <ul class="vsm--menu" :style="{ width: sidebarWidth }">
+          <sidebar-menu-item
+            v-for="item in computedMenu"
+            :key="item.id"
+            :item="item"
+          >
+            <template #dropdown-icon="{ isOpen }">
+              <slot name="dropdown-icon" v-bind="{ isOpen }">
+                <span class="vsm--arrow_default" />
+              </slot>
+            </template>
+          </sidebar-menu-item>
+        </ul>
+        <slot name="footer" />
+        <!-- end scroll -->
+      </div>
     </sidebar-menu-scroll>
     <button v-if="!hideToggle" class="vsm--toggle-btn" @click="onToggleClick">
       <slot name="toggle-icon">
