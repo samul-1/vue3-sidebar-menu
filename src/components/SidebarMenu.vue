@@ -3,36 +3,27 @@
     ref="sidebarMenuRef"
     class="v-sidebar-menu"
     :class="sidebarClass"
-    :style="{'max-width': sidebarWidth}"
+    :style="{ 'max-width': sidebarWidth }"
   >
-    <slot name="header" />
     <sidebar-menu-scroll>
-      <ul
-        class="vsm--menu"
-        :style="{'width': sidebarWidth}"
-      >
+      <slot name="header" />
+
+      <ul class="vsm--menu" :style="{ width: sidebarWidth }">
         <sidebar-menu-item
           v-for="item in computedMenu"
           :key="item.id"
           :item="item"
         >
           <template #dropdown-icon="{ isOpen }">
-            <slot
-              name="dropdown-icon"
-              v-bind="{ isOpen }"
-            >
+            <slot name="dropdown-icon" v-bind="{ isOpen }">
               <span class="vsm--arrow_default" />
             </slot>
           </template>
         </sidebar-menu-item>
       </ul>
+      <slot name="footer" />
     </sidebar-menu-scroll>
-    <slot name="footer" />
-    <button
-      v-if="!hideToggle"
-      class="vsm--toggle-btn"
-      @click="onToggleClick"
-    >
+    <button v-if="!hideToggle" class="vsm--toggle-btn" @click="onToggleClick">
       <slot name="toggle-icon">
         <span class="vsm--toggle-btn_default" />
       </slot>
@@ -41,130 +32,144 @@
 </template>
 
 <script>
-import { watch, getCurrentInstance, onMounted, onUnmounted, computed } from 'vue'
-import { initSidebar } from '../use/useSidebar'
+import {
+  watch,
+  getCurrentInstance,
+  onMounted,
+  onUnmounted,
+  computed,
+} from "vue";
+import { initSidebar } from "../use/useSidebar";
 
-import SidebarMenuItem from './SidebarMenuItem.vue'
-import SidebarMenuScroll from './SidebarMenuScroll.vue'
+import SidebarMenuItem from "./SidebarMenuItem.vue";
+import SidebarMenuScroll from "./SidebarMenuScroll.vue";
 
 export default {
-  name: 'SidebarMenu',
+  name: "SidebarMenu",
   components: {
     SidebarMenuItem,
-    SidebarMenuScroll
+    SidebarMenuScroll,
   },
   props: {
     menu: {
       type: Array,
-      required: true
+      required: true,
     },
     collapsed: {
       type: Boolean,
-      default: false
+      default: false,
     },
     width: {
       type: String,
-      default: '290px'
+      default: "290px",
     },
     widthCollapsed: {
       type: String,
-      default: '65px'
+      default: "65px",
     },
     showChild: {
       type: Boolean,
-      default: false
+      default: false,
     },
     theme: {
       type: String,
-      default: ''
+      default: "",
     },
     showOneChild: {
       type: Boolean,
-      default: false
+      default: false,
     },
     rtl: {
       type: Boolean,
-      default: false
+      default: false,
     },
     relative: {
       type: Boolean,
-      default: false
+      default: false,
     },
     hideToggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disableHover: {
       type: Boolean,
-      default: false
+      default: false,
     },
     linkComponentName: {
       type: String,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   emits: {
-    'item-click' (event, item) {
-      return !!(event && item)
+    "item-click"(event, item) {
+      return !!(event && item);
     },
-    'update:collapsed' (collapsed) {
-      return !!(typeof collapsed === 'boolean')
-    }
+    "update:collapsed"(collapsed) {
+      return !!(typeof collapsed === "boolean");
+    },
   },
-  setup (props, context) {
+  setup(props, context) {
     const {
       getSidebarRef: sidebarMenuRef,
       getIsCollapsed: isCollapsed,
       updateIsCollapsed,
       unsetMobileItem,
-      updateCurrentRoute
-    } = initSidebar(props, context)
+      updateCurrentRoute,
+    } = initSidebar(props, context);
 
     const computedMenu = computed(() => {
-      let id = 0
-      function transformItems (items) {
-        function randomId () {
-          return `${Date.now() + '' + id++}`
+      let id = 0;
+      function transformItems(items) {
+        function randomId() {
+          return `${Date.now() + "" + id++}`;
         }
-        return items.map(item => {
-          return { id: randomId(), ...item, ...(item.child && { child: transformItems(item.child) }) }
-        })
+        return items.map((item) => {
+          return {
+            id: randomId(),
+            ...item,
+            ...(item.child && { child: transformItems(item.child) }),
+          };
+        });
       }
-      return transformItems(props.menu)
-    })
+      return transformItems(props.menu);
+    });
 
     const sidebarWidth = computed(() => {
-      return isCollapsed.value ? props.widthCollapsed : props.width
-    })
+      return isCollapsed.value ? props.widthCollapsed : props.width;
+    });
 
     const sidebarClass = computed(() => {
       return [
-        !isCollapsed.value ? 'vsm_expanded' : 'vsm_collapsed',
-        props.theme ? `vsm_${props.theme}` : '',
-        props.rtl ? 'vsm_rtl' : '',
-        props.relative ? 'vsm_relative' : ''
-      ]
-    })
+        !isCollapsed.value ? "vsm_expanded" : "vsm_collapsed",
+        props.theme ? `vsm_${props.theme}` : "",
+        props.rtl ? "vsm_rtl" : "",
+        props.relative ? "vsm_relative" : "",
+      ];
+    });
 
     const onToggleClick = () => {
-      unsetMobileItem()
-      updateIsCollapsed(!isCollapsed.value)
-      context.emit('update:collapsed', isCollapsed.value)
-    }
+      unsetMobileItem();
+      updateIsCollapsed(!isCollapsed.value);
+      context.emit("update:collapsed", isCollapsed.value);
+    };
 
-    watch(() => props.collapsed, (currentCollapsed) => {
-      unsetMobileItem()
-      updateIsCollapsed(currentCollapsed)
-    })
+    watch(
+      () => props.collapsed,
+      (currentCollapsed) => {
+        unsetMobileItem();
+        updateIsCollapsed(currentCollapsed);
+      }
+    );
 
-    const router = getCurrentInstance().appContext.config.globalProperties.$router
+    const router =
+      getCurrentInstance().appContext.config.globalProperties.$router;
     if (!router) {
       onMounted(() => {
-        window.addEventListener('hashchange', updateCurrentRoute)
-      })
+        window.addEventListener("hashchange", updateCurrentRoute);
+      });
       onUnmounted(() => {
-        window.removeEventListener('hashchange', updateCurrentRoute)
-      })
+        window.removeEventListener("hashchange", updateCurrentRoute);
+      });
     }
 
     return {
@@ -174,12 +179,12 @@ export default {
       sidebarWidth,
       sidebarClass,
       onToggleClick,
-      onRouteChange: updateCurrentRoute
-    }
-  }
-}
+      onRouteChange: updateCurrentRoute,
+    };
+  },
+};
 </script>
 
 <style lang="scss">
-@import '../scss/vue-sidebar-menu';
+@import "../scss/vue-sidebar-menu";
 </style>
